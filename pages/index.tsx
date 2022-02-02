@@ -1,6 +1,7 @@
 import { format, parseISO } from 'date-fns';
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
+import Image from 'next/Image';
 import React from 'react';
 import Layout from '../components/Layout';
 import { getAllPosts } from '../lib/api';
@@ -13,22 +14,17 @@ type IndexProps = {
 export const Index = ({ posts }: IndexProps): JSX.Element => {
   return (
     <Layout>
-      <h1>Home Page</h1>
-      <p>Next.js starter for your next blog or personal site. Built with:</p>
-      <ul className="list-disc pl-4 my-6">
-        <li>Next.js</li>
-        <li className="mt-2">Typescript</li>
-        <li className="mt-2">MDX</li>
-        <li className="mt-2">Tailwind CSS</li>
-      </ul>
+      <Image
+        className="profile"
+        src="/images/profile.jpg"
+        height={144}
+        width={144}
+        alt="Alex Swan"
+      />
+      <h1>Alex Swan's Blog</h1>
+      <p>Code Snippets, Projects, Tutorials</p>
 
-      <a
-        href="https://github.com/ChangoMan/nextjs-typescript-mdx-blog"
-        className="inline-block px-7 py-3 rounded-md text-white dark:text-white bg-blue-600 hover:bg-blue-700 hover:text-white dark:hover:text-white"
-      >
-        Get the source code!
-      </a>
-
+      <h2>Recent Posts</h2>
       {posts.map((post) => (
         <article key={post.slug} className="mt-12">
           <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">

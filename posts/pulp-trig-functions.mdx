@@ -1,0 +1,96 @@
+---
+title: Playdate Pulp - Sin/Cos functions
+description: Here's how I put trig functions into the Playdate Pulp scripting language
+date: '2022-02-02'
+---
+
+This will be helpful to some. I make helper functions to estimate sin and cos functions. I used Taylor series to estimate. Here's an example drawing a dot at the position of the crank:
+
+```js:Player
+on draw do
+	// Draw a crank dot
+	if event.ra!=0 then
+		a = event.aa
+		a /= 180
+		a *= 3.14159
+		emit "sin"
+		emit "cos"
+		x = sin
+		x *= 32
+		x += 32
+		x += 2
+		
+		y = cos
+		y *= 32
+		y += 32
+		y += 2
+	end
+	fill "white" at x,y,4,4
+end
+```
+
+Put this in the game script:
+
+```js:Game
+on sin do
+	aNorm = a
+	while aNorm>=3.141592 do
+		aNorm -= 6.283184
+	end
+	
+	n = 0
+	modifier = 1
+	sin = 0
+	while n<6 do
+		// modifier * aNorm^(2n+1)
+		// -------------------
+		// (2n+1)!
+		pow = n
+		pow *= 2
+		pow += 1
+		
+		// numerator
+		num = modifier
+		p = pow
+		while p>0 do
+			num *= aNorm
+			p--
+		end
+		
+		// denominator
+		f = pow
+		den = 1
+		while f>0 do
+			den *= f
+			f--
+		end
+		if den==0 then
+			den = 1
+		end
+
+		// Add to result
+		num /= den
+		sin += num
+		
+		// Set up next loop
+		modifier *= -1
+		n += 1
+	end
+end
+
+on cos do
+	oldA = a
+	oldSin = sin
+	a += 1.57079
+	call "sin"
+	cos = sin
+	cos *= -1 // Trig is y up, pulp is y down
+	a = oldA
+	sin = oldSin
+end
+
+```
+
+the n < 6 is the number of iterations, and I've found 6 is good enough for three decimal places.
+
+Edit: There were some issues when the number was > pi, which I fixed by limiting the angle from -pi to pi.
