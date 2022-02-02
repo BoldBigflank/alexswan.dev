@@ -13,10 +13,6 @@ export const About = (): JSX.Element => {
         I&apos;m a dev currently living in Chicago with my wife, daughter, dog
         and three cats.
       </p>
-      <p>
-        I&apos;m a dev currently living in Chicago with my wife, daughter, dog
-        and three cats.
-      </p>
       <ul>
         <li>
           <a
