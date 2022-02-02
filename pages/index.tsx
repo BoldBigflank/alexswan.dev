@@ -21,7 +21,7 @@ export const Index = ({ posts }: IndexProps): JSX.Element => {
         width={144}
         alt="Alex Swan"
       />
-      <h1>Alex Swan's Blog</h1>
+      <h1>Alex Swan&apos;s Blog</h1>
       <p>Code Snippets, Projects, Tutorials</p>
 
       <h2>Recent Posts</h2>
