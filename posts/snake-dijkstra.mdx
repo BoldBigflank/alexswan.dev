@@ -1,21 +1,22 @@
 ---
 title: "Using Dijkstra's Algorithm for Battlesnake  "
-date: "2022-02-05T00:00:00Z"
+date: '2022-02-05T00:00:00Z'
 layout: post
-category: "Tutorials"
+category: 'Tutorials'
 description: "An introduction to using Dijkstra's Algorithm to make your Battlesnake smarter"
 tags:
-  - "TypeScript"
-  - "JavaScript"
-  - "Battlesnake"
+  - 'TypeScript'
+  - 'JavaScript'
+  - 'Battlesnake'
 ---
+
 <Image
-    className="header"
-    src="/images/snake-dijkstra.png"
-    height={250}
-    width={250}
-    alt="Alex Swan"
-/>  
+  className="header"
+  src="/images/snake-dijkstra.png"
+  height={250}
+  width={250}
+  alt="Alex Swan"
+/>{' '}
 
 ## Intro
 
@@ -24,16 +25,18 @@ By the end of this tutorial you will have a simple [Battlesnake](https://play.ba
 ## Setup
 
 I used the [TypeScript Starter Project](https://github.com/BattlesnakeOfficial/starter-snake-typescript) to make my snake.
+
 ```bash
 git clone git@github.com:BattlesnakeOfficial/starter-snake-typescript.git battlesnake
 cd battlesnake
 ```
 
-I used `dijkstrajs` [npm package](https://www.npmjs.com/package/dijkstrajs) package to do the pathfinding. 
+I used `dijkstrajs` [npm package](https://www.npmjs.com/package/dijkstrajs) package to do the pathfinding.
 
 ```bash
 npm install dijkstrajs
 ```
+
 And for typescript to allow this we add a file:
 
 ```bash
@@ -46,7 +49,7 @@ Create a class to hold our grid data. The constructor will take the game data pr
 
 In summary, every node will have an edge to each of the four adjacent tiles. Then, we'll change the weight of hazard tiles. Lastly, we'll crank up the weight of edges that have a snake in them.
 
-Then we create a `findPath` function to 
+Then we create a `findPath` function to
 
 ```ts:grid.ts
 /// <reference path='./dijkstra.d.ts' />
@@ -116,7 +119,7 @@ export default class Grid {
         this.graph = graph
     }
 
-    /* 
+    /*
         Uniformly name the key based on its coordinate
     */
     keyName(coord: Coord): string {
