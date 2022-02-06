@@ -234,3 +234,11 @@ function getDirection(start: Coord, key: string): string | undefined {
 }
 
 ```
+
+## Wrapped Mode
+
+For the 2022 season Battlesnake introduced Wrapped mode. It wouldn't take too much work to get this grid to have wrapped edges, you would just need to detect when you were at a border node and create an edge pointing to the other side.
+
+## Final Thoughts
+
+This is set up to tell us the path that is the lowest health cost to get to food, which might not necessarily be the shortest path. If you wanted your snake to make decisions based on the fewest number of turns, you could set up a second graph where every edge has a cost of 1.
