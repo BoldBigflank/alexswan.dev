@@ -1,0 +1,145 @@
+---
+title: "Text Your Battlesnake's Progress"
+date: "2022-02-06T00:00:00Z"
+layout: post
+category: "Tutorials"
+description: "Send regular updates as your snake climbs the ranks."
+tags:
+  - "JavaScript"
+  - "Battlesnake"
+  - "Twilio"
+---
+
+<Image
+  className="header"
+  src="/images/battlesnake-reports.png"
+  height={250}
+  width={250}
+  alt="SMS conversation showing snake win count and percentage"
+/>{' '}
+
+## Intro
+
+I've been running a [Battlesnake](https://play.battlesnake.com) server for a few months now, and while I know it's participating in Arenas/Leagues approximately every ten minutes, I wanted a little more insight into how my snake is doing. This project allows me to see my snake's progress in the league at regular intervals. I used [Twilio](https://twilio.com) because it's super easy to get messages sent to my phone.
+
+## Setup
+
+Fork the [JavaScript Starter Snake](https://github.com/BattlesnakeOfficial/starter-snake-javascript)
+
+Clone your repository
+
+```bash
+git clone git@github.com:{YOUR_GITHUB_USERNAME}/starter-snake-javascript.git
+cd starter-snake-javascript
+```
+
+Add the packages we'll be using: node-persist to save game results, dotenv to interact with environment variables, and Twilio to send messages
+```bash
+npm install twilio node-persist dotenv
+```
+
+Set up your environment variables how you would like. For me, I use the `dotenv` package and create a .env file at the root of the repository:
+```bash:.env
+TWILIO_ACCOUNT_SID=ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+TWILIO_AUTH_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+FROM_NUMBER=+10005550199
+TO_NUMBER=+10005550198
+```
+
+You will need to update each of these with your own [Credentials from Twilio's Console](https://console.twilio.com/), including a From Number that you have authorized to send SMS. The To Number will be where you want to receive the updates.
+
+## Update Battlesnake's Logic
+
+There's two spots we will update to get these reports going. First, at the top of the logic.js file, we need to initialize dotenv, node-persist and twilio, as well as define some variables for use later:
+
+```javascript:logic.js
+// Dotenv
+require('dotenv').config()
+
+// node-persist
+const storage = require('node-persist');
+storage.init()
+
+// Twilio
+const twilio = require('twilio')();
+
+// Settings
+const UPDATE_FREQUENCY = 10 // Every 10 games, send an upate
+
+```
+
+Next we can update the `/end` endpoint function to do our logic.
+
+```js:logic.js
+async function end(gameState) {
+    console.log(`${gameState.game.id} END\n`)
+    // Parse the results
+    let winnerName = false
+    let won = false
+    if (gameState.board.snakes.length !== 0) {
+        const winningSnake = gameState.board.snakes[0]
+        winnerName = gameState.board.snakes[0].name
+        if (winningSnake.id === gameState.you.id) {
+            won = true
+        }
+    }
+    // Save the results to storage
+    let games = []
+    try {
+        games = await storage.getItem('games')
+    } catch (err) {
+        console.error('failed to load games')
+    }
+    games.push({
+        winnerName,
+        won
+    })
+    await storage.setItem('games', games)
+    // If we have enough results
+    if (games.length % UPDATE_FREQUENCY === 0) {
+        await sendSummary(games) // Defined next
+    }
+}
+```
+
+Note the `async` at the beginning of the function definition. We are using asynchronous functions so we gotta set that there.
+
+We first determine if we are the winner. We are not told whether we won, so we have to determine if we won by being the only snake left alive at the end of the game.
+
+Next, we pull our games from storage, and add our own to the array. Then we check if it's time to send an update, and call a function if so. Here's the function I made for myself:
+
+
+```js:logic.js
+async function sendSummary(games) {
+    // Prepare a summary
+    const gamesWon = games.filter(g => g.won)
+    const gamesLost = games.filter(g => !g.won)
+    const winPercent = Math.floor(gamesWon.length / games.length * 100)
+    const from = process.env.FROM_NUMBER
+    const to = process.env.TO_NUMBER
+    
+    // First, show the win rate
+    let body = `After ${games.length} games, you have ${gamesWon.length} wins for rate of ${winPercent}%`
+
+    // Next, find the people who defeated me the most
+    const winnersNames = gamesLost.map((game) => game.winnerName)
+    const rankedWinners = winnersNames.sort((a, b) => {
+        winnersNames.filter(w => w === a).length - winnersNames.filter(w => w === b).length
+    })
+    const highestWinner = rankedWinners[0]
+    const highestWinnerCount = rankedWinners.filter(w => w === highestWinner).length
+    body += `\nYou lost the most to ${highestWinner} (${highestWinnerCount} times)`
+
+    twilio.messages.create({
+        from,
+        to,
+        body
+    })
+}
+```
+
+This will let me know my games won, games played, win percentage, and the snake who beats me most often.
+
+## Final Thoughts
+
+There's a lot of ways you can run with this tech. You could implement subscriptions to let others get the updates. You could trigger a cron job to send a report and get a daily update instead of after a certain number of games. You could send detailed information about every game as it happens. You could set up Phone call alerts when you have a surprisingly low win rate.
