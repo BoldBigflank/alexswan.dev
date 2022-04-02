@@ -1,0 +1,39 @@
+---
+title: SnakeLED - A Raspberry Pi Powered Battlesnake Viewer
+description: The LED Matrix's grid is perfectly suited for a large game of Snake
+date: '2022-04-01'
+---
+
+I wanted to have a passive display showing a game of Snake. With a clever use of [Battlesnake](https://play.battlesnake.com/)'s undocumented websocket server, I could let the brains of the game be handled by experts, and leave just the task of displaying the game board to the tiny computer powering this led matrix display.
+
+## Demo
+
+<ReactPlayer url="https://youtu.be/3lHqLGw1e6I" />
+
+## Hardware
+
+- Raspberry Pi 3 (1GB RAM)
+- [Smart Pixel Fashion Light Purse](https://www.amazon.com/dp/B071LQR2QG?ref_=cm_sw_r_cp_ud_dp_2RGNP4TN7WBJ812MK3K1) - Or any other 75hub board you find on Adafruit
+
+I installed Ubuntu Server on the Pi.
+
+## Repository
+
+[See the code](https://github.com/BoldBigflank/snake-led/). I used the [Battlesnake Python Starter](https://github.com/BattlesnakeOfficial/starter-snake-python) repository template as a base, because I wanted to leave the option open to having its own snake on board just in case. I added [hzeller's rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix) as a submodule, which showed me how to hook up the GPIO wires.
+
+## Basic logic
+
+- Start a web server that listens for GET / with a `gameId` query parameter
+  - I updated my [main Battlesnake contender](https://play.battlesnake.com/u/boldbigflank/snake2_v3_final_final1/) to fetch this url at the start of each game it plays.
+- When a new gameId comes in, add it to the queue. If no games are running, start a game from the queue.
+- To start a game, use the gameId to call the Battlesnake Engine API to get details about the game, then open a websocket connection to the Battlesnake Engine API to get each of the game's board states (Frames).
+- When a new Frame comes in, update the board to show the most recent frame. This involves drawing the hazards, food, and each snake onto the board. If the game is in "wrapped" mode, do a little something extra to repeat the board across the whole screen.
+- When the game is over, disconnect the websocket and remove the gameId from the queue. Attempt to start the next game.
+
+Once I had the code where I wanted, I set up [PM2](https://pm2.io/) to run the script at startup. I have a Dynamic DNS set up and my main router does port forwarding so outside machines can hit the web server.
+
+## Possible Improvements
+
+- Right now a game's turns are shown as fast as possible, which is blazing fast for completed games, and looks offbeat when games are in progress and each turn is completed at a different time. I could add another queue (buffer) and set the frames to display for a minimum amount of time.
+- I did make each snake head brighter than the body, and every fourth body segment darker so you can see some movement as they go. I could keep improving the animation by making food pulse.
+- The winner is currently only the last snake shown on the board, but I could celebrate that more by downloading the snake's head/tail customization and drawing it on the screen.
