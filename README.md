@@ -31,8 +31,8 @@ npm run dev
 
 Your new site will be up at http://localhost:3030/
 
-
 #### Connections per chain
+
 Then for each first panel of a chain there is a set of
 (R1, G1, B1, R2, G2, B2) that you have to connect to the corresponding pins.
 They are marked `[1]`, `[2]` and `[3]` for chain 1, 2, and 3 below.
@@ -46,25 +46,25 @@ separate icon:
 `[1]`=:smile:, `[2]`=:boom: and `[3]`=:droplet: ; signals that go to all
 chains have all icons.
 
-|Connection                        | Pin | Pin |  Connection
-|---------------------------------:|:---:|:---:|:-----------------------------
-|                             -    |   1 |   2 | -
-|                             -    |   3 |   4 | -
-|                             -    |   5 |   6 | **GND**
-|                       **strobe** |   7 |   8 | -
-|                          **GND** |   9 |  10 | -
-|                       **clock**  |  11 |  12 | **OE-** 
-|                       **[1] G1** |  13 |  14 | **GND**
-|                            **A** |  15 |  16 | **B**    
-|                             -    |  17 |  18 | **C**    
-|                       **[1] B2** |  19 |  20 | **GND**
-|                       **[1] G2** |  21 |  22 | -
-|                       **[1] R1** |  23 |  24 | **[1] R2** 
-|                          **GND** |  25 |  26 | **[1] B1** 
-|                             -    |  27 |  28 | -
-|                              -   |  29 |  30 | **GND**
-|                              -   |  31 |  32 | -
-|                              -   |  33 |  34 | **GND**
-|                              -   |  35 |  36 | -
-|                              -   |  37 |  38 | -
-|                              -   |  39 |  40 | -
+| Connection | Pin | Pin | Connection |
+| ---------: | :-: | :-: | :--------- |
+|          - |  1  |  2  | -          |
+|          - |  3  |  4  | -          |
+|          - |  5  |  6  | **GND**    |
+| **strobe** |  7  |  8  | -          |
+|    **GND** |  9  | 10  | -          |
+|  **clock** | 11  | 12  | **OE-**    |
+| **[1] G1** | 13  | 14  | **GND**    |
+|      **A** | 15  | 16  | **B**      |
+|          - | 17  | 18  | **C**      |
+| **[1] B2** | 19  | 20  | **GND**    |
+| **[1] G2** | 21  | 22  | -          |
+| **[1] R1** | 23  | 24  | **[1] R2** |
+|    **GND** | 25  | 26  | **[1] B1** |
+|          - | 27  | 28  | -          |
+|          - | 29  | 30  | **GND**    |
+|          - | 31  | 32  | -          |
+|          - | 33  | 34  | **GND**    |
+|          - | 35  | 36  | -          |
+|          - | 37  | 38  | -          |
+|          - | 39  | 40  | -          |

@@ -1,30 +1,28 @@
 ---
 title: "Learning From My Battlesnake's Mistakes"
-date: "2022-02-16T00:00:00Z"
+date: '2022-02-16T00:00:00Z'
 layout: post
-category: "Battlesnake"
-description: "I find just where my Battlesnake went wrong and teach it not to make that mistake again, ever."
+category: 'Battlesnake'
+description: 'I find just where my Battlesnake went wrong and teach it not to make that mistake again, ever.'
 tags:
-  - "JavaScript"
-  - "TypeScript"
-  - "Battlesnake"
+  - 'JavaScript'
+  - 'TypeScript'
+  - 'Battlesnake'
 ---
 
 ## Intro
-
-
 
 ## My Battlesnake's Brain
 
 The [Starter Projects]() create an object with a key for each direction, whose value is a boolean. At the end of the logic, it takes all the keys whose value is `true` and randomly picks one. My snake, `snake2_v3_FINAL_final(1)`, does something similar, where each value is a number and various actions will increase or decrease the number of each direction. After all the logic is done, it sorts and picks the direction with the highest value. Each move, it steps through these steps:
 
-* If the direction is a wall, set its priority to 0
-* If the direction has a snake in its way, set its priority to 0
-* Analyze each direction using a basic [flood fill]() algorithm, -5 for every path that leads to a tunnel
-* Using [Dijkstra's Algorithm](), find the best path to food. Set +4 to the direction that goes to food
-* Avoid spaces that a "scary" snake (who has more health than me) might move into this turn, Setting between -5 and -7 to each direction based on how likely they are to move there.
-* Prioritize "yummy" snakes (who have less health than me), setting between +1 and +5 depending on how well we can predict where they will go.
-* Avoid snakes with equal health, setting between -4 and -6 depending on how likely they are to move into the adjacent spot.
+- If the direction is a wall, set its priority to 0
+- If the direction has a snake in its way, set its priority to 0
+- Analyze each direction using a basic [flood fill]() algorithm, -5 for every path that leads to a tunnel
+- Using [Dijkstra's Algorithm](), find the best path to food. Set +4 to the direction that goes to food
+- Avoid spaces that a "scary" snake (who has more health than me) might move into this turn, Setting between -5 and -7 to each direction based on how likely they are to move there.
+- Prioritize "yummy" snakes (who have less health than me), setting between +1 and +5 depending on how well we can predict where they will go.
+- Avoid snakes with equal health, setting between -4 and -6 depending on how likely they are to move into the adjacent spot.
 
 That's basically it, and each priority is modular, so I can add more or take out others as I see fit.
 
@@ -33,6 +31,7 @@ That's basically it, and each priority is modular, so I can add more or take out
 I've forked the [board]() repo and added a button that sends the current state to my dev server. I've added some more data to the `POST /move` response that I call "thoughts", which is a list of coordinates and color/size information to put dots on the board to show what my snake is thinking. Now when I see my snake behave poorly in a tournament game, I can load it in my board project, go to the point where I think it should have chosen a different direction, then change my code until the choice it makes fits my expectations. Here's a few of the times I found and fixed issues that led to my snake's demise.
 
 ### I need to give up going toward food, I don't have enough health
+
 <Image
   className="header"
   height={428}
@@ -41,16 +40,18 @@ I've forked the [board]() repo and added a button that sends the current state t
   alt="A battlesnake with food down through hazard sauce and clear space up"
 />{' '}
 
-Sometimes, there is not path to food that will fit the 
+Sometimes, there is not path to food that will fit the
 
 #### The Fix
+
 I check the health cost of both paths (the shortest and the least energy cost), and if neither are less than my current health, I find another target to aim for, such as my own tail.
 
 ### I choose to attack an equal length snake when I have a safer option
+
 <Image
   className="header"
   height={428}
-  width={428} 
+  width={428}
   src="/images/battlesnake-fixes/equal-length-snake.png"
   alt="A battlesnake with food down through hazard sauce and clear space up"
 />{' '}
@@ -58,6 +59,7 @@ I check the health cost of both paths (the shortest and the least energy cost), 
 I am given a choice to go right to safety, or left to do a head-to-head against an equal length snake. Because they have not good move otherwise, they will be moving into that spot. This particular game, my snake chose death.
 
 #### The Fix
+
 I changed the priorities of attempting a head-to-head with an equal length snake so that I'll be more safe.
 
 ### I should leave the hazard to stay alive
@@ -73,8 +75,8 @@ I changed the priorities of attempting a head-to-head with an equal length snake
 I had a choice to head directly toward the food through a bunch of hazard squares. The issue is the shortest path would cost more health than I currently had, so I won't be able to make it before running out of health.
 
 #### The Fix
-I set up two Grids for Dijkstra's Algorithm, one for health and one for fewest turns (where every edge is 1). First I find the shortest path, then find the health cost associated with using that path. If that is less than my current health, use it. If not, switch to the lowest health cost path.
 
+I set up two Grids for Dijkstra's Algorithm, one for health and one for fewest turns (where every edge is 1). First I find the shortest path, then find the health cost associated with using that path. If that is less than my current health, use it. If not, switch to the lowest health cost path.
 
 ### If I eat food, I close the loop
 
@@ -89,4 +91,5 @@ I set up two Grids for Dijkstra's Algorithm, one for health and one for fewest t
 I expect the tail to move at a certain time, so I go get food in 1 turn, which extends the tail, turning that spot into a dead end.
 
 #### The Fix
+
 I take the distance to food and add 1 to each segment of the snake near it, so that we play it safe for the scenario where they get that food.
