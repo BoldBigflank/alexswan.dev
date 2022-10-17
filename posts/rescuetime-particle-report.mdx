@@ -14,11 +14,11 @@ date: '2022-10-15'
 
 ## Summary
 
-I'm currently my own manager, so I wanted to give myself a little accountability. I made this device to display my productivity over the last 60 minutes using [RescueTime](https://www.rescuetime.com), an IoT device built with [Particle](https://particle.io) and [NeoPixel](https://www.adafruit.com/category/168), and a [Raspberry Pi](https://raspberrypi.org).
+I'm currently my own manager, so I wanted to give myself a little accountability. I made this device to display my productivity over the last 60 minutes using [RescueTime](https://www.rescuetime.com), an IoT device built with [Particle](https://particle.io) and [NeoPixel](https://www.adafruit.com/category/168), and a [Raspberry Pi](https://raspberrypi.org). I like how this turns my productivity into a little game, so I'm motivated to try to turn all the lights blue and keep it going.
 
 RescueTime watches my PC and phone and keeps track of what I'm doing, labeling them as either productive or unproductive. It provides data in 5-minute chunks, which I can use to display on my circular NeoPixel Ring, kind of like a clock.
 
-There are two main parts to this mashup: The cron script and the Particle IoT device.
+There are two main pieces of code for this mashup: The cron script and the Particle IoT device.
 
 
 ## The Particle Photon With NeoPixel Ring
@@ -107,21 +107,6 @@ void updateStrip() {
     } else {
         delay( 1000 );
     }
-}
-
-void rainbow (){
-    int brightness = 128;
-    period = 2000;
-    for ( uint16_t p = 0; p < strip.numPixels(); p++ ) {
-        double angle = 2.0 * PI * p / strip.numPixels();
-        double r = (0.75 * cos(angle) + 0.25) * 255;
-        double g = (0.75 * cos(angle + PI * 2.0 / 3.0) + 0.25) * 255;
-        double b = (0.75 * cos(angle + PI * 4.0 / 3.0) + 0.25) * 255;
-        colorArray[p*3] = (uint8_t)r;
-        colorArray[p*3+1] = (uint8_t)g;
-        colorArray[p*3+2] = (uint8_t)b;
-    }
-    strip.show();
 }
 
 void clear() {
