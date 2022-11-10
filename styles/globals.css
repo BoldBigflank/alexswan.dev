@@ -121,3 +121,18 @@ pre {
 .profile {
   border-radius: 500px;
 }
+
+.title {
+  margin-top: 35px;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.half {
+  display: inline-block;
+  max-width: 50%;
+}
+
+video, img {
+  max-width: 100%;
+}
