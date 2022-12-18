@@ -35,6 +35,13 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
           >
             NextJS Blog Template
           </a>
+          <a
+            style={{ display: 'none' }}
+            rel="me"
+            href="https://mas.to/@BoldBigflank"
+          >
+            Mastodon
+          </a>
         </div>
       </footer>
     </>
