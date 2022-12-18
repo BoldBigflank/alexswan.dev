@@ -25,6 +25,15 @@ export const About = (): JSX.Element => {
         </li>
         <li>
           <a
+            href="https://mas.to/@BoldBigflank"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Mastodon
+          </a>
+        </li>
+        <li>
+          <a
             href="https://www.linkedin.com/in/alexboldit/"
             target="_blank"
             rel="noreferrer"
