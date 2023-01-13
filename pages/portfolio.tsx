@@ -18,8 +18,7 @@ export const Portfolio = (): JSX.Element => {
               rel="noreferrer"
             >
               Harvest Puzzle Box
-            </a>{' '}
-            (Playdate)
+            </a>
           </div>
           <div className="subtitle">LDJam 52 Entry (Theme: harvest)</div>
           <div>Platform: Web</div>
@@ -52,8 +51,7 @@ export const Portfolio = (): JSX.Element => {
               rel="noreferrer"
             >
               Beast
-            </a>{' '}
-            (Playdate)
+            </a>
           </div>
           <div>Platform: Playdate</div>
           <div>
@@ -87,7 +85,7 @@ export const Portfolio = (): JSX.Element => {
               Tut&apos;s Tomb
             </a>{' '}
           </div>
-          <div className="subtitle">JS13k 2022 Entry (Theme: Death)</div>
+          <div className="subtitle">JS13k 2022 Entry (Theme: death)</div>
           <div>Platform: Web/WebXR</div>
           <div>
             Framework:{' '}
