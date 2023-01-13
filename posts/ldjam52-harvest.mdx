@@ -1,0 +1,42 @@
+---
+title: LDJam 52 - Harvest Puzzle Box Post Mortem
+description: Created in 48 hours for the Ludum Dare Game Jam, this puzzle box was made in Unity3d and fit the theme 'harvest'.
+date: '2023-01-13'
+---
+
+<Image
+  className="header"
+  src="/images/harvestpuzzle.png"
+  height={360}
+  width={360}
+  alt="Harvest Puzzle Screenshot"
+/>{' '}
+
+## Background
+Ludum Dare is a regular online game jam which is a great time to build something quickly. I have participated in the past a few times, but it's been a while. I had a free weekend so I gave it a shot. I used a Trello board to organize ideas and tasks, and landed on the idea of a puzzle box. I took inspiration from The Room, which is a game about a box. [Play the game on itch](https://boldbigflank.itch.io/harvest-puzzle-box)
+
+
+## What Went well
+ * I scoped the project pretty well. I was able to get a complete game done in the time alotted.
+ * I felt comfortable working in Unity, even though some of my skills are a bit outdated.
+ * Initial feedback has been really uplifting. It's so nice to build up other game devs and get such nice comments back.
+
+
+## What Could Have Gone Better
+ * Spent a long time trying to create a perspective puzzle, but wasn't able to use any tools well enough. I tried Google Blocks (dead), Tilt Brush, Blender, MagicaCSG, and I wasn't skilled enough to make something that gets the result I wanted quickly. Eventually I scrapped the perspective puzzle idea and instead did a simpler observation puzzle.
+ * I didn't know the rules and ended up submitting to Jam (72h) while only working during Compo (48h). I used free art assets to get something done, which isn't allowed in the Compo.
+ * One puzzle had multiple solutions, but only checked for one. This is because it's faster to hard-code the solution and in the jam time is a high priority.
+ * I never actually used the Unity Visual Scripting even though I thought I would. My logic is more scattered among the objects in the scene, which is good for fast prototypes but will be a real hassle to maintain or update.
+
+## What To Do Better Next Time
+ * I think I need to make a Google Blocks-ish tool to arrange primitives and create objects. I could use this in both my JS13k and LDJam projects, and I imagine it would let me build complex buildings and objects while fitting the size constraint.
+ * I could fully commit to Unity Visual Scripting next time. I would like to learn it, so I gotta use it.
+ * I need to figure out how to have real sfx/music, rather than just the ZZFX exports. ZZFX was great, and if it didn't exist I wouldn't have sfx at all. ZZFXM doesn't have a wav export option, so I can't use it in Unity projects.
+
+## Play
+
+[Play the game here](https://boldbigflank.itch.io/harvest-puzzle-box)
+
+## Source
+
+[Check out the source on GitHub](https://github.com/BoldBigflank/LDJAM52-Harvest)
