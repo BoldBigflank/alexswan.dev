@@ -169,9 +169,15 @@ export const Portfolio = (): JSX.Element => {
             </a>
           </div>
         </div>
-        <video controls width="560" loop>
-          <source src="/media/backlit-capture.webm" type="video/webm"></source>
-        </video>
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube-nocookie.com/embed/byXN4rrITcM"
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
         <div className="description">
           The moon is lined up perfectly to solve the puzzles and bring back an
           ancient treasure, the Golden Scarab!
