@@ -1,13 +1,13 @@
 ---
 title: "Text Your Battlesnake's Progress"
-date: "2022-02-06T00:00:00Z"
+date: '2022-02-06T00:00:00Z'
 layout: post
-category: "Tutorials"
-description: "Send regular updates as your snake climbs the ranks."
+category: 'Tutorials'
+description: 'Send regular updates as your snake climbs the ranks.'
 tags:
-  - "JavaScript"
-  - "Battlesnake"
-  - "Twilio"
+  - 'JavaScript'
+  - 'Battlesnake'
+  - 'Twilio'
 ---
 
 <Image
@@ -36,11 +36,13 @@ cd starter-snake-javascript
 ```
 
 Add the packages we'll be using: node-persist to save game results, dotenv to interact with environment variables, and Twilio to send messages
+
 ```bash
 npm install twilio node-persist dotenv
 ```
 
 Set up your environment variables how you would like. For me, I use the `dotenv` package and create a .env file at the root of the repository:
+
 ```bash:.env
 TWILIO_ACCOUNT_SID=ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 TWILIO_AUTH_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -110,7 +112,6 @@ We first determine if we are the winner. We are not told whether we won, so we h
 
 Next, we pull our games from storage, and add our own to the array. Then we check if it's time to send an update, and call a function if so. Here's the function I made for myself:
 
-
 ```js:logic.js
 async function sendSummary(games) {
     // Prepare a summary
@@ -119,7 +120,7 @@ async function sendSummary(games) {
     const winPercent = Math.floor(gamesWon.length / games.length * 100)
     const from = process.env.FROM_NUMBER
     const to = process.env.TO_NUMBER
-    
+
     // First, show the win rate
     let body = `After ${games.length} games, you have ${gamesWon.length} wins for rate of ${winPercent}%`
 
@@ -145,4 +146,3 @@ This will let me know my games won, games played, win percentage, and the snake 
 ## Final Thoughts
 
 There's a lot of ways you can run with this tech. You could implement subscriptions to let others get the updates. You could trigger a cron job to send a report and get a daily update instead of after a certain number of games. You could send detailed information about every game as it happens. You could set up Phone call alerts when you have a surprisingly low win rate.
-
