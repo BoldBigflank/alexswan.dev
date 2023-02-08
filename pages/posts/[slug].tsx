@@ -7,6 +7,7 @@ import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import Head from 'next/head';
 import Image from 'next/image';
+import ReactPlayer from 'react-player'
 import Link from 'next/link';
 import path from 'path';
 import React from 'react';
@@ -24,6 +25,7 @@ import { postFilePaths, POSTS_PATH } from '../../utils/mdxUtils';
 const components = {
   Head,
   Image,
+  ReactPlayer,
   Link,
 };
 
@@ -34,7 +36,7 @@ type PostPageProps = {
 
 const PostPage = ({ source, frontMatter }: PostPageProps): JSX.Element => {
   const customMeta: MetaProps = {
-    title: `${frontMatter.title} - Hunter Chang`,
+    title: `${frontMatter.title} - Alex Swan`,
     description: frontMatter.description,
     image: `${WEBSITE_HOST_URL}${frontMatter.image}`,
     date: frontMatter.date,

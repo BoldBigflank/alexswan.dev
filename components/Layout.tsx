@@ -28,12 +28,12 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
       </main>
       <footer className="py-8">
         <div className="max-w-5xl px-8 mx-auto">
-          Built by{' '}
+          Built using{' '}
           <a
             className="text-gray-900 dark:text-white"
-            href="https://twitter.com/huntarosan"
+            href="https://github.com/ChangoMan/nextjs-typescript-mdx-blog"
           >
-            Hunter Chang
+            NextJS Blog Template
           </a>
         </div>
       </footer>
