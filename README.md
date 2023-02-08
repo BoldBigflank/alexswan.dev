@@ -29,4 +29,4 @@ yarn dev
 npm run dev
 ```
 
-Your new site will be up at http://localhost:3000/
+Your new site will be up at http://localhost:3030/
