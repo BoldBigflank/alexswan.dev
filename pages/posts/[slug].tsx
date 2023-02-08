@@ -7,7 +7,7 @@ import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import Head from 'next/head';
 import Image from 'next/image';
-import ReactPlayer from 'react-player'
+import ReactPlayer from 'react-player';
 import Link from 'next/link';
 import path from 'path';
 import React from 'react';

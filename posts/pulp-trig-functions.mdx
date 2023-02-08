@@ -19,7 +19,7 @@ on draw do
 		x *= 32
 		x += 32
 		x += 2
-		
+
 		y = cos
 		y *= 32
 		y += 32
@@ -37,7 +37,7 @@ on sin do
 	while aNorm>=3.141592 do
 		aNorm -= 6.283184
 	end
-	
+
 	n = 0
 	modifier = 1
 	sin = 0
@@ -48,7 +48,7 @@ on sin do
 		pow = n
 		pow *= 2
 		pow += 1
-		
+
 		// numerator
 		num = modifier
 		p = pow
@@ -56,7 +56,7 @@ on sin do
 			num *= aNorm
 			p--
 		end
-		
+
 		// denominator
 		f = pow
 		den = 1
@@ -71,7 +71,7 @@ on sin do
 		// Add to result
 		num /= den
 		sin += num
-		
+
 		// Set up next loop
 		modifier *= -1
 		n += 1
