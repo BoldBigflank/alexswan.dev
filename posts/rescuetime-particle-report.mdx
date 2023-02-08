@@ -1,0 +1,339 @@
+---
+title: Display Your Productivity on Your Wall
+description: Track your productivity with RescueTime, then send it to a NeoPixel Ring with Particle Cloud
+date: '2022-10-15'
+---
+
+<Image
+  className="header"
+  src="/images/rt-particle.png"
+  height={480}
+  width={480}
+  alt="Alex Swan"
+/>{' '}
+
+## Summary
+
+I'm currently my own manager, so I wanted to give myself a little accountability. I made this device to display my productivity over the last 60 minutes using [RescueTime](https://www.rescuetime.com), an IoT device built with [Particle](https://particle.io) and [NeoPixel](https://www.adafruit.com/category/168), and a [Raspberry Pi](https://raspberrypi.org).
+
+RescueTime watches my PC and phone and keeps track of what I'm doing, labeling them as either productive or unproductive. It provides data in 5-minute chunks, which I can use to display on my circular NeoPixel Ring, kind of like a clock.
+
+There are two main parts to this mashup: The cron script and the Particle IoT device.
+
+
+## The Particle Photon With NeoPixel Ring
+
+I used a [Particle Photon](https://store.particle.io/collections/gen-2/products/photon) and a [NeoPixel Ring Kit](https://www.adafruit.com/product/2268) for the hardware. I want this device to be able to handle many inputs, so I made a generic color/speed functions and other scripts can tell it what colors to show and at what speed.
+
+Basically this script will set up [Particle Cloud Functions](https://docs.particle.io/reference/device-os/api/cloud-functions/particle-function/) for speed and colors, then regularly updates the lights based on the current speed and colors it has received. For this particular project, I don't want the lights to spin so I will keep the speed at 0.
+
+
+```c
+// This #include statement was automatically added by the Particle IDE.
+#include <neopixel.h>
+
+// This #include statement was automatically added by the Particle IDE.
+#include <elapsedMillis.h>
+#include <math.h>
+
+#define PIXEL_PIN D6
+#define PIXEL_TYPE WS2812B
+
+LEDSystemTheme theme; // Enable custom theme
+
+int boardLed = D7;
+
+elapsedMillis ledElapsed;
+bool ledOn = false;
+bool busy = false;
+unsigned int ledInterval = 100;
+
+uint8_t colorArray [72] = { };
+int period = 2000;
+
+const int PIXEL_COUNT = 24;
+const float PI = 3.14159;
+
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(PIXEL_COUNT, PIXEL_PIN, PIXEL_TYPE);
+
+int pos = 0, dir = 1;
+int frame = 0;
+int j;
+
+
+void setup() {
+  pinMode(boardLed,OUTPUT); // Our on-board LED is output as well
+  
+  ledElapsed = 0;
+
+  // Variables to be watched
+  Particle.function("colors", handleColorsUpdate);
+  Particle.function("speed", handleSpeedUpdate);
+  
+  theme.setColor(LED_SIGNAL_CLOUD_CONNECTED, 0x00000000); // Set LED_SIGNAL_NETWORK_ON to no color
+  theme.apply(); // Apply theme settings 
+  
+  strip.begin();
+  strip.setBrightness(25); //set the brightness of NeoPixels to your preference
+  strip.show(); // Initialize all pixels to 'off'
+  clear();
+}
+
+void loop() {
+    if( busy && ledElapsed > ledInterval ) {
+        toggleLed();
+    }
+    updateStrip();
+}
+
+void updateStrip() {
+    if (period > 0) frame = (frame + 1) % strip.numPixels();
+    int brightness = 128;
+    for ( uint16_t p = 0; p < strip.numPixels(); p++ ) {
+        int index = (p + frame) % strip.numPixels();
+        strip.setPixelColor(
+            index,
+            strip.Color(
+                colorArray[p*3], // r
+                colorArray[p*3+1], // g
+                colorArray[p*3+2] // b
+            )
+        );
+    }
+    strip.show();
+    // delay( 16 ); // 60fps
+    if (period > 0) {
+        delay( (int)(period / strip.numPixels()) ); // Update when it's time to move to the next LED
+    } else {
+        delay( 1000 );
+    }
+}
+
+void rainbow (){
+    int brightness = 128;
+    period = 2000;
+    for ( uint16_t p = 0; p < strip.numPixels(); p++ ) {
+        double angle = 2.0 * PI * p / strip.numPixels();
+        double r = (0.75 * cos(angle) + 0.25) * 255;
+        double g = (0.75 * cos(angle + PI * 2.0 / 3.0) + 0.25) * 255;
+        double b = (0.75 * cos(angle + PI * 4.0 / 3.0) + 0.25) * 255;
+        colorArray[p*3] = (uint8_t)r;
+        colorArray[p*3+1] = (uint8_t)g;
+        colorArray[p*3+2] = (uint8_t)b;
+    }
+    strip.show();
+}
+
+void clear() {
+    period = 0;
+    for ( uint16_t p = 0; p < strip.numPixels(); p++ ) {
+        colorArray[p*3] = 0;
+        colorArray[p*3+1] = (p % 3 == 0) ? 32 : 0;
+        colorArray[p*3+2] = 0;
+    }
+}
+
+void startLed() {
+    ledOn = true;
+    ledElapsed = 0;
+    digitalWrite(boardLed,HIGH);
+}
+
+
+void stopLed() {
+    digitalWrite(boardLed,LOW);
+    ledOn = false;
+}
+
+void toggleLed() {
+    if (ledOn == true) {
+        stopLed();
+    }
+    else {
+        startLed();
+    }
+    ledElapsed = 0;
+}
+
+int handleColorsUpdate(String command) {
+    // Must be 144 characters
+    // Like ff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ff
+    if (strlen(command) < strip.numPixels() * 6) return -1;
+    char colorData[strip.numPixels() * 6] = { };
+    command.toCharArray(colorData, strip.numPixels() * 6);
+    for (int i = 0; i < strip.numPixels(); i += 1) {
+        char red[2] = { };
+        command.substring(i*6, i*6+2).toCharArray(red, 2);
+        char green[2] = { };
+        command.substring(i*6+2, i*6+4).toCharArray(green, 2);
+        char blue[2] = { };
+        command.substring(i*6+4, i*6+6).toCharArray(blue, 2);
+        colorArray[i*3] = (uint8_t)strtol(red, NULL, 16);
+        colorArray[i*3+1] = (uint8_t)strtol(green, NULL, 16);
+        colorArray[i*3+2] = (uint8_t)strtol(blue, NULL, 16);
+
+    }
+    return 0;
+}
+
+int handleSpeedUpdate(String command) {
+    period = command.toInt();
+    return 0;
+}
+
+```
+
+## The Cron script
+
+First I start a new project in a directory
+```bash
+mkdir rescuetime-ledring
+cd rescuetime-ledring
+npm init
+npm i chalk cross-fetch dotenv
+git init
+```
+
+and I add `"type": "module",` to the `package.json`, and add `node_modules` and `.env` to a `.gitignore` file
+
+Then I make a `.env` file to hold a [RescueTime API Key](https://www.rescuetime.com/anapi/manage) and the [Particle Access Token](https://docs.particle.io/reference/cloud-apis/access-tokens/)
+
+```js:.env
+DEBUG=true
+RT_KEY=XXXXXXX_XXXXXXXXXXXXXXXXXXXXXXXXX_XXXXXX
+PARTICLE_ACCESS_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```
+
+Now I'm ready to make the script itself
+
+This will pull data from the [RescueTime Analytic Data API](https://www.rescuetime.com/rtx/developers#analytic-api-reference), format it into a color string the Particle script I wrote expects, then sends it to the Particle Photon through the [Particle Function](https://docs.particle.io/reference/device-os/api/cloud-functions/particle-function/).
+
+```javascript:index.js
+import * as dotenv from 'dotenv'
+dotenv.config()
+
+import chalk from 'chalk'
+import fetch from 'cross-fetch'
+
+const DEBUG = process.env.DEBUG
+const PARTICLE_ACCESS_TOKEN = process.env.PARTICLE_ACCESS_TOKEN
+const RT_KEY = process.env.RT_KEY
+
+// 24 lights, 6 hex per = 144 characters
+
+const main = async () => {
+    // Get data from RescueTime
+    const productivity = await getRTFeed()
+    // Form a string of lights
+    const colorString = getColorString(productivity.rows)
+    // Send it to Particle
+    await updateColors(colorString)
+}
+
+const getRTFeed = async () => {
+    // To request information about the user's productivity levels, by hour, for the date of January 1, 2020:
+    // https://www.rescuetime.com/anapi/data
+    //   ?key=YOUR_API_KEY
+    //   &perspective=interval
+    //   &restrict_kind=productivity
+    //   &interval=hour
+    //   &restrict_begin=2020-01-01
+    //   &restrict_end=2020-01-01
+    //   &format=json
+    const day = 1000 * 60 * 60 * 24 // milliseconds in a day
+    const today = new Date()
+    const yesterday = new Date(today - day)
+    const tomorrow = new Date(today + day)
+    
+    const rtQuery = {
+        key: RT_KEY,
+        perspective: 'interval',
+        resolution_time: 'minute',
+        restrict_begin: `${yesterday.getUTCFullYear()}-${yesterday.getMonth() + 1}-${yesterday.getDate()}`,
+        restrict_end: `${tomorrow.getUTCFullYear()}-${tomorrow.getMonth() + 1}-${tomorrow.getDate()}`,
+        restrict_kind: 'productivity',
+        format: 'json'
+    }
+    const qs = new URLSearchParams(rtQuery)
+    const rtUrl = `https://www.rescuetime.com/anapi/data?${qs.toString()}`
+    
+    const response = await fetch(rtUrl)
+    const json = await response.json()
+    return json
+}
+
+const getColorString = (productivity) => {
+    const now = new Date(productivity[productivity.length - 1][0])
+    const colors = new Array(24 * 3).fill(0x00) // 24 LEDs, 3 channels each
+    for (let i = 0; i < productivity.length; i++) {
+        const [date, seconds, num, prodScore] = productivity[i]
+        const d = new Date(date)
+        // If it's over 1 hour old, break
+        if (d <= new Date(now - 1000 * 60 * 55)) continue
+        const slot = Math.floor(d.getMinutes() / 5) * 2 * 3
+        const percent = seconds / 300
+        if (seconds > 0) {
+            if (prodScore < 0) {
+                // Increase red
+                colors[slot] += Math.floor(0xff * percent)
+                colors[slot + 3] += Math.floor(0xff * percent)
+            } else if (prodScore > 0) {
+                // Increase blue
+                colors[slot + 2] += Math.floor(0xff * percent)
+                colors[slot + 5] += Math.floor(0xff * percent)
+            } else {
+                // increase green
+                colors[slot + 1] += Math.floor(0xff * percent)
+                colors[slot + 4] += Math.floor(0xff * percent)
+            }
+        }
+    }
+    return colors.map((c, i) => {
+        return c.toString(16).padStart(2, '0')
+    }).join('')
+}
+
+const updateColors = async (colorString) => {
+    if (DEBUG) {
+        // Show a log of it
+        let lightString = ''
+        for (let i = 0; i < colorString.length; i = i + 6) {
+            const colorUnit = `#${colorString.substring(i, i + 6)}`
+            const unitColor = chalk.hex(colorUnit)
+            lightString += unitColor('⬤ ')
+        }
+        console.log(lightString)
+    }
+    const particleUrl = 'https://api.particle.io/v1/devices/3b003b000747343232363230/colors'
+    const response = await fetch(particleUrl, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${PARTICLE_ACCESS_TOKEN}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            arg: colorString
+        })
+    })
+    const json = await response.json()
+    if (DEBUG) console.log(json)
+}
+
+main()
+```
+
+
+## Making it Run regularly
+
+The last step was to use a [Raspberry Pi](https://www.raspberrypi.org/) to run it every 5 minutes. I cloned the repository, added the .env information, then set up a cron job using PM2 to manage it. You could use the system's cron to handle it, but I am already using PM2 for other services so I chose to keep everything together.
+
+```bash
+pm2 start index.js --name rescuetime-ledring --cron "*/5 * * * *" 
+pm2 save
+```
+
+
+
+## Source
+
+You can see the full cron script on [GitHub](https://github.com/BoldBigflank/rescuetime-ledring)
