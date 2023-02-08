@@ -11,7 +11,7 @@ export const About = (): JSX.Element => {
       <h1>About Alex</h1>
       <p>
         I&apos;m a dev currently living in Chicago with my wife, daughter, dog
-        and three cats.
+        and two cats.
       </p>
       <ul>
         <li>
