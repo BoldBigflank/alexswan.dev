@@ -7,31 +7,28 @@ date: '2022-02-02'
 This will be helpful to some. I make helper functions to estimate sin and cos functions. I used Taylor series to estimate. Here's an example drawing a dot at the position of the crank:
 
 ```js:Player
-on draw do
+on crank do
 	// Draw a crank dot
-	if event.ra!=0 then
-		a = event.aa
-		a /= 180
-		a *= 3.14159
-		emit "sin"
-		emit "cos"
-		x = sin
-		x *= 32
-		x += 32
-		x += 2
+	a = event.aa
+	a /= 180
+	a *= 3.14159
+	call "sin"
+	call "cos"
+	x = sin
+	x *= 32 // Scales the radius on the X axis
+	x += 32 // Moves the center point right
+	x += 2
 
-		y = cos
-		y *= 32
-		y += 32
-		y += 2
-	end
+	y = cos
+	y *= 32 // Scales the radius on the Y axis
+	y += 32 // Moves the center point down
+	y += 2
+end
+
+on draw do
 	fill "white" at x,y,4,4
 end
-```
 
-Put this in the game script:
-
-```js:Game
 on sin do
 	aNorm = a
 	while aNorm>=3.141592 do
@@ -88,7 +85,6 @@ on cos do
 	a = oldA
 	sin = oldSin
 end
-
 ```
 
 the n < 6 is the number of iterations, and I've found 6 is good enough for three decimal places.
