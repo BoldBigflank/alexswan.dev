@@ -20,13 +20,11 @@ RescueTime watches my PC and phone and keeps track of what I'm doing, labeling t
 
 There are two main pieces of code for this mashup: The cron script and the Particle IoT device.
 
-
 ## The Particle Photon With NeoPixel Ring
 
 I used a [Particle Photon](https://store.particle.io/collections/gen-2/products/photon) and a [NeoPixel Ring Kit](https://www.adafruit.com/product/2268) for the hardware. I want this device to be able to handle many inputs, so I made a generic color/speed functions and other scripts can tell it what colors to show and at what speed.
 
 Basically this script will set up [Particle Cloud Functions](https://docs.particle.io/reference/device-os/api/cloud-functions/particle-function/) for speed and colors, then regularly updates the lights based on the current speed and colors it has received. For this particular project, I don't want the lights to spin so I will keep the speed at 0.
-
 
 ```c
 // This #include statement was automatically added by the Particle IDE.
@@ -63,16 +61,16 @@ int j;
 
 void setup() {
   pinMode(boardLed,OUTPUT); // Our on-board LED is output as well
-  
+
   ledElapsed = 0;
 
   // Variables to be watched
   Particle.function("colors", handleColorsUpdate);
   Particle.function("speed", handleSpeedUpdate);
-  
+
   theme.setColor(LED_SIGNAL_CLOUD_CONNECTED, 0x00000000); // Set LED_SIGNAL_NETWORK_ON to no color
-  theme.apply(); // Apply theme settings 
-  
+  theme.apply(); // Apply theme settings
+
   strip.begin();
   strip.setBrightness(25); //set the brightness of NeoPixels to your preference
   strip.show(); // Initialize all pixels to 'off'
@@ -171,6 +169,7 @@ int handleSpeedUpdate(String command) {
 ## The Cron script
 
 First I start a new project in a directory
+
 ```bash
 mkdir rescuetime-ledring
 cd rescuetime-ledring
@@ -229,7 +228,7 @@ const getRTFeed = async () => {
     const today = new Date()
     const yesterday = new Date(today - day)
     const tomorrow = new Date(today + day)
-    
+
     const rtQuery = {
         key: RT_KEY,
         perspective: 'interval',
@@ -241,7 +240,7 @@ const getRTFeed = async () => {
     }
     const qs = new URLSearchParams(rtQuery)
     const rtUrl = `https://www.rescuetime.com/anapi/data?${qs.toString()}`
-    
+
     const response = await fetch(rtUrl)
     const json = await response.json()
     return json
@@ -307,17 +306,14 @@ const updateColors = async (colorString) => {
 main()
 ```
 
-
 ## Making it Run regularly
 
 The last step was to use a [Raspberry Pi](https://www.raspberrypi.org/) to run it every 5 minutes. I cloned the repository, added the .env information, then set up a cron job using PM2 to manage it. You could use the system's cron to handle it, but I am already using PM2 for other services so I chose to keep everything together.
 
 ```bash
-pm2 start index.js --name rescuetime-ledring --cron "*/5 * * * *" 
+pm2 start index.js --name rescuetime-ledring --cron "*/5 * * * *"
 pm2 save
 ```
-
-
 
 ## Source
 
