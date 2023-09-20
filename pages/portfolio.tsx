@@ -13,6 +13,52 @@ export const Portfolio = (): JSX.Element => {
         <div className="meta">
           <div className="title">
             <a
+              href="https://alexswan.info/js13k-2023/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              The Mystery at Glamis Castle
+            </a>
+          </div>
+          <div className="subtitle">
+            JS13kGames 2023 Entry (Theme: 13th Century)
+          </div>
+          <div>Platform: Web/WebXR</div>
+          <div>
+            Framework:{' '}
+            <a
+              href="https://www.babylonjs.com/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              babylon.js
+            </a>
+          </div>
+        </div>
+        <p>
+          <div>
+            <img
+              style={{ maxWidth: '320px' }}
+              src="/images/js13k2023-scene.png"
+            ></img>
+          </div>
+          <div className="description">
+            <div>
+              Solve puzzles to earn the spot of King in 13th century Scotland
+            </div>
+
+            <div>
+              <strong>Note:</strong> As a part of the JS13k Games Jam, submitted
+              code must be less than 13 kilobytes (excluding the babylon.js
+              library)
+            </div>
+          </div>
+        </p>
+      </div>
+      <div className="portfolio-item">
+        <div className="meta">
+          <div className="title">
+            <a
               href="https://boldbigflank.itch.io/harvest-puzzle-box"
               target="_blank"
               rel="noreferrer"
@@ -105,8 +151,15 @@ export const Portfolio = (): JSX.Element => {
           ></source>
         </video>
         <div className="description">
-          You are tasked with preparing King Tut to make the journey from death
-          to the afterlife. Solve the two puzzles to complete the task.
+          <div>
+            You are tasked with preparing King Tut to make the journey from
+            death to the afterlife. Solve the two puzzles to complete the task.
+          </div>
+          <div>
+            <strong>Note:</strong> As a part of the JS13k Games Jam, submitted
+            code must be less than 13 kilobytes (excluding the babylon.js
+            library)
+          </div>
         </div>
       </div>
       <div className="portfolio-item">
@@ -140,9 +193,16 @@ export const Portfolio = (): JSX.Element => {
           ></source>
         </video>
         <div className="description">
-          Create sculptures from a model as fast as possible. After reaching
-          100%, try to do it without making mistakes. Share screenshots of your
-          scoreboard to show off your achievements.
+          <div>
+            Create sculptures from a model as fast as possible. After reaching
+            100%, try to do it without making mistakes. Share screenshots of
+            your scoreboard to show off your achievements.
+          </div>
+          <div>
+            <strong>Note:</strong> As a part of the JS13k Games Jam, submitted
+            code must be less than 13 kilobytes (excluding the babylon.js
+            library)
+          </div>
         </div>
       </div>
       <div className="portfolio-item">
@@ -227,6 +287,10 @@ export const Portfolio = (): JSX.Element => {
           </a>
           <br />
           Avoid the lines, or anything pink.
+          <div>
+            <strong>Note:</strong> As a part of the JS13k Games Jam, submitted
+            code must be less than 13 kilobytes
+          </div>
         </div>
       </div>
       <div className="portfolio-item">
@@ -256,8 +320,14 @@ export const Portfolio = (): JSX.Element => {
           ></source>
         </video>
         <div className="description">
-          You are flying into ever expanding polyhedrons. Move your body around
-          to line up with the holes in each before you collide.
+          <div>
+            You are flying into ever expanding polyhedrons. Move your body
+            around to line up with the holes in each before you collide.
+          </div>
+          <div>
+            <strong>Note:</strong> As a part of the JS13k Games Jam, submitted
+            code must be less than 13 kilobytes (excluding the A-Frame library)
+          </div>
         </div>
       </div>
       <div className="portfolio-item">
