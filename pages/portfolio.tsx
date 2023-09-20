@@ -1,5 +1,6 @@
 import React from 'react';
 import Layout from '../components/Layout';
+import Image from 'next/image';
 
 export const Portfolio = (): JSX.Element => {
   return (
@@ -37,10 +38,11 @@ export const Portfolio = (): JSX.Element => {
         </div>
         <p>
           <div>
-            <img
+            <Image
               style={{ maxWidth: '320px' }}
               src="/images/js13k2023-scene.png"
-            ></img>
+              alt="a 3d model of Glamis Castle"
+            ></Image>
           </div>
           <div className="description">
             <div>
@@ -77,10 +79,11 @@ export const Portfolio = (): JSX.Element => {
         </div>
         <p>
           <div>
-            <img
+            <Image
               style={{ maxWidth: '320px' }}
               src="/images/harvestpuzzle.png"
-            ></img>
+              alt="The Harvest Puzzle Box"
+            ></Image>
           </div>
           <div className="description">
             Prepare for harvest by solving puzzles related to Seed, Dirt, Water
@@ -109,8 +112,16 @@ export const Portfolio = (): JSX.Element => {
         </div>
         <p>
           <div>
-            <img className="half" src="/images/beast-title.png"></img>
-            <img className="half" src="/images/beast-gameplay.png"></img>
+            <Image
+              alt="Beast title screen"
+              className="half"
+              src="/images/beast-title.png"
+            ></Image>
+            <Image
+              alt="Beast gameplay screen"
+              className="half"
+              src="/images/beast-gameplay.png"
+            ></Image>
           </div>
           <div className="description">
             You play a diamond against a room full of monsters. You can move
