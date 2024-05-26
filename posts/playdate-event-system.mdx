@@ -1,0 +1,155 @@
+---
+title: 'Using an Event System for my Playdate Game'
+date: '2024-05-26T00:00:00Z'
+layout: post
+category: 'Playdate'
+description: 'I removed dependencies by using a pub/sub event system in my game jam game'
+tags:
+  - 'Lua'
+  - 'Playdate'
+  - 'Gamedev'
+---
+
+## Intro
+
+## The Panic Playdate
+
+The playdate is a little yellow device that has a crank. The screen is 1-bit (black or white with no greys) and the limited internet access and processing power mean the games that are built for it are generally small and cute.
+
+The most popular way to develop for the playdate is using the [Playdate SDK](https://play.date/dev/) and Lua, which I did for a recent [game jam game](https://boldbigflank.itch.io/one-man-threat-ops). 
+
+## The Problem
+
+The various components of my game need to respond to changes, but I don't want to wire every possible combination to another, since any added features would have a heavy refactoring cost. As an example, here's a couple cases where classes need to know the state of other classes:
+
+* The UI needs to know when a player's health changes or the timer increments
+* The game needs to know when mission objectives are completed, such as enemies dying or the player reaches a teleporter
+
+## The Solution
+
+I made a singleton class that could save and recall functions tied to explicit channels.
+
+```lua:scripts/events.lua
+
+local pd <const> = playdate
+local gfx <const> = playdate.graphics
+
+class('Events').extends()
+
+function Events:init()
+    self.callbacks = {}
+end
+
+-- Select an event string to listen
+-- Then the callback function that should execute
+function Events:on(event, callback)
+    self.callbacks[event] = self.callbacks[event] or {}
+    self.callbacks[event][#self.callbacks[event]+1] = callback
+end
+
+-- Cleanup functions that won't be used any more
+function Events:off(event, callback)
+    table.remove(self.callbacks[event], i)
+    for i, e in ipairs(self.callbacks[event]) do
+        if e == callback then
+            table.remove(self.callbacks[event], i)
+            break
+        end
+    end
+end
+
+-- Trigger an event
+function Events:emit(event, ...) -- the second parameter allows you to include any number of parameters when calling this function
+    local fns = table.shallowcopy(self.callbacks[event]) -- so they can be removed inline
+    for i = 1,#fns do
+        fns[i](...)
+    end
+end
+
+-- Make the import an instance of itself
+Events = Events()
+```
+
+Then I imported this in `main.lua`, the entry point for Playdate games
+```lua:main.lua
+-- ... the rest of the imports
+import "scripts/events"
+-- ... shorthand aliases, constants ...
+-- ... pd.update() function
+```
+
+With this simple setup, any other classes in the game will have access to `Events`, no need to import anywhere else.
+
+## Uses
+
+### Keep track of mission objectives
+My Game Manager will need to know when every enemy on the level dies, or when the player reached a teleporter.
+```lua:scripts/gameManager.lua
+class('GameSceneUI').extends(gfx.sprite)
+function GameManager:init()
+    Events:on('enemy_killed', function()
+        self.enemyCount -= 1 
+        self:checkWinConditions()
+    end)
+    Events:on('teleporter_reached', function()
+        self:checkWinConditions()
+    end)
+end
+
+-- ... the checkWinConditions() function
+```
+Then a barrel, enemy or player can emit those events
+```ts:scripts/enemy.lua
+-- ...
+function Enemy:update()
+    if (self.health == 0) then
+        Events:emit('enemy_destroyed')
+        -- remove self
+    end
+end
+```
+```ts:scripts/player.lua
+-- ...
+function Player:update()
+    if (--[[ player collides with teleporter --]]) then
+        Events:emit('teleporter_reached')
+        -- remove self
+    end
+end
+```
+
+### Including Extra Information
+
+We can also send parameters along with the emit event. This is incredibly useful when you want to know the new value of a variable, such as the player's current health or the amount of time left on a timer.
+
+First, the class responsible for drawing the player's health listens:
+
+```lua:scripts/gameSceneUI.lua
+class('GameSceneUI').extends(gfx.sprite)
+function GameSceneUI:init()
+    -- ... other init stuff
+    Events:on('health_updated', function (health) self:updateHealth(health) end)
+end
+-- ... the updateHealth(amount) function
+```
+
+And then events are emitted like so:
+```lua:scripts/player.lua
+function Player:takeDamage(amount)
+    self.health = math.max(0, self.health - amount)
+    Events:emit('health_updated', self.health)
+    if self.health == 0 then
+        -- death logic
+    end
+end
+```
+
+This way we don't need to assign a variable and poll it every update to know when the value changes.
+
+## More Useful Features
+* Multiple classes can listen for the same events. Not only would the game manager be interested when `enemy_killed` is emitted, other enemies could also listen and become inquisitive or enraged.
+* Expanding features later will have very little cost. For example, to create an Achievements system you can hook into existing events (like `enemies_killed`) without changing any other classes.
+
+## Conclusion
+
+The Event system is a clean way to share information in a structured way. 
