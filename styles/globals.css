@@ -155,3 +155,11 @@ img {
   padding-top: 12px;
   font-size: 1.1em;
 }
+
+.playdate img {
+  background-color: #ffb738;
+  padding: 18px;
+  border-radius: 12px;
+  width: auto;
+  margin-top:6px;
+}

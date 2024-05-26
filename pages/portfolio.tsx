@@ -14,7 +14,52 @@ export const Portfolio = (): JSX.Element => {
         <div className="meta">
           <div className="title">
             <a
-              href="https://alexswan.info/js13k-2023/"
+              href="https://boldbigflank.itch.io/one-man-threat-ops"
+              target="_blank"
+              rel="noreferrer"
+            >
+              One Man Threat Ops
+            </a>
+          </div>
+          <div className="subtitle">
+            Uncrank&apos;d Game Jam Entry (Theme: Reflector and/or Float)
+          </div>
+          <div>Platform: Playdate</div>
+          <div>
+            Framework:{' '}
+            <a href="https://play.date/dev/" target="_blank" rel="noreferrer">
+              Playdate SDK
+            </a>
+          </div>
+        </div>
+        <div>
+          <div className="playdate">
+            <Image
+              src="/images/onemanthreatops.gif"
+              alt="a 3d model of Glamis Castle"
+              style={{
+                width: '100%',
+                maxWidth: '400px',
+                height: 'auto',
+              }}
+              width={400}
+              height={240}
+            ></Image>
+          </div>
+          <div className="description">
+            <div>Top Down Shooter for Playdate</div>
+            <div>
+              Use the crank to aim your character, and go toe to toe against
+              alien bugs and humanoids.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="portfolio-item">
+        <div className="meta">
+          <div className="title">
+            <a
+              href="https://alexswan.io/js13k-2023/"
               target="_blank"
               rel="noreferrer"
             >
@@ -36,12 +81,18 @@ export const Portfolio = (): JSX.Element => {
             </a>
           </div>
         </div>
-        <p>
-          <div>
+        <div>
+          <div className="relative">
             <Image
-              style={{ maxWidth: '320px' }}
               src="/images/js13k2023-scene.png"
               alt="a 3d model of Glamis Castle"
+              style={{
+                width: '100%',
+                maxWidth: '400px',
+                height: 'auto',
+              }}
+              width={640}
+              height={360}
             ></Image>
           </div>
           <div className="description">
@@ -55,7 +106,7 @@ export const Portfolio = (): JSX.Element => {
               library)
             </div>
           </div>
-        </p>
+        </div>
       </div>
       <div className="portfolio-item">
         <div className="meta">
@@ -77,19 +128,25 @@ export const Portfolio = (): JSX.Element => {
             </a>
           </div>
         </div>
-        <p>
-          <div>
+        <div>
+          <div className="relative">
             <Image
-              style={{ maxWidth: '320px' }}
               src="/images/harvestpuzzle.png"
               alt="The Harvest Puzzle Box"
+              style={{
+                width: '100%',
+                maxWidth: '400px',
+                height: 'auto',
+              }}
+              width={703}
+              height={703}
             ></Image>
           </div>
           <div className="description">
             Prepare for harvest by solving puzzles related to Seed, Dirt, Water
             and Sun.
           </div>
-        </p>
+        </div>
       </div>
       <div className="portfolio-item">
         <div className="meta">
@@ -110,17 +167,31 @@ export const Portfolio = (): JSX.Element => {
             </a>
           </div>
         </div>
-        <p>
-          <div>
+        <div>
+          <div className="relative">
             <Image
               alt="Beast title screen"
               className="half"
               src="/images/beast-title.png"
+              style={{
+                width: '100%',
+                maxWidth: '400px',
+                height: 'auto',
+              }}
+              width={423}
+              height={271}
             ></Image>
             <Image
               alt="Beast gameplay screen"
               className="half"
               src="/images/beast-gameplay.png"
+              style={{
+                width: '100%',
+                maxWidth: '400px',
+                height: 'auto',
+              }}
+              width={423}
+              height={271}
             ></Image>
           </div>
           <div className="description">
@@ -129,7 +200,7 @@ export const Portfolio = (): JSX.Element => {
             the monsters get to you. You can defeat monsters by squishing them
             between walls.{' '}
           </div>
-        </p>
+        </div>
       </div>
       <div className="portfolio-item">
         <div className="meta">
