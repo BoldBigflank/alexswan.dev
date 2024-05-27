@@ -60,7 +60,7 @@ end
 
 -- Trigger an event
 function Events:emit(event, ...) -- the second parameter allows you to include any number of parameters when calling this function
-    local fns = table.shallowcopy(self.callbacks[event]) -- so they can be removed inline
+    local fns = table.shallowcopy(self.callbacks[event]) -- just in case the array changes while we are iterating
     for i = 1,#fns do
         fns[i](...)
     end
