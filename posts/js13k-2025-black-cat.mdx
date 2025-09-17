@@ -1,0 +1,54 @@
+---
+title: AL13YCAT - WebXR Word Puzzle for JS13K
+description: As a cat DJ, create the purrfect setlist to pump up the crowd. Created in 1 month and limited to 13KB of zipped code.
+date: '2025-09-16'
+---
+
+<iframe
+  width="560"
+  height="315"
+  src="https://www.youtube-nocookie.com/embed/9u9oEYCQNgw"
+  title="YouTube video player"
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen
+></iframe>
+
+## Background
+
+[Js13kGames](https://js13kgames.com/) is a yearly game jam that tasks web developers with building a full game in less than 13 Kilobytes of code. This year's theme was "Black Cat".  
+
+The goal of my game is to place vinyl records onto the turntable to play songs for a cat rave. If the new record flows with the current record (according to the color, title or artist), the combo meter will go up. Fully completing each combo will win the game.  
+
+I wanted to build a word puzzle for players to solve. I wrote a few scripts to help find words that would work for specific categories, and made sure that they would loop so that a player could start at any point in the loop.
+
+
+## What Went well
+
+- Used [BlockBench](https://www.blockbench.net/) to create models, and made a plugin to export and a script to load models (Note: This was a "What To Do Better" point from my [LDJAM52 Post Mortem](/posts/ldjam52-harvest))
+- [Event System](https://github.com/BoldBigflank/js13k-2025-al13ycat/blob/main/src/libraries/Events.ts), [Animation System](https://github.com/BoldBigflank/js13k-2025-al13ycat/blob/main/src/scripts/AnimationFactory.ts), and [Interactions](https://github.com/BoldBigflank/js13k-2025-al13ycat/blob/main/src/main.ts#L348-L428) (things I made before) were redone to handle [THREE.js](https://threejs.org/)
+- The Puzzle was complete within days, and the game was fully playable beginning to end by day 10
+- [InstancedMesh](https://threejs.org/docs/#api/en/objects/InstancedMesh) to make a large crowd
+- Dynamic music that changes depending on the progress of the puzzle.
+- During this jam, [Ben](https://github.com/benallfree) created [l13](https://www.npmjs.com/package/l13) which provided a massive amount of space through optimized code minification.
+
+## What Could Have Gone Better
+
+- I did some playtesting, but could do more beforehand. What is intuitive to me doesn't always click with others as they see it for the first time.
+- WebXR is tough, could have spent more time on the controller model
+- I looked into using shaders, but writing and testing them didn't really take off
+- The InstancedMesh requires one BufferGeometry to work properly, so my exported models didn't work. I needed to replace it with an ExtrudeGeometry to be more simple but still catlike.
+
+## What To Do Better Next Time
+
+- Create a color palette texture and set the UVs for each model, for much less memory usage.
+- Merge geometries for a model, which would allow me to turn any model into an InstancedMesh.
+- Ask for and implement suggestions from playtesters.
+
+## Play
+
+[Play the game here](https://alexswan.io/js13k-2025-al13ycat/)
+
+## Source
+
+[Check out the source on GitHub](https://github.com/BoldBigflank/js13k-2025-al13ycat)
