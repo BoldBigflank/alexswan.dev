@@ -14,6 +14,116 @@ export const Portfolio = (): JSX.Element => {
         <div className="meta">
           <div className="title">
             <a
+              href="https://boldbigflank.itch.io/al13ycat"
+              target="_blank"
+              rel="noreferrer"
+            >
+              AL13YCAT
+            </a>
+          </div>
+          <div className="subtitle">
+            JS13kGames 2025 Entry (🥇Winner of the WebVR Category; Theme: Black
+            Cat)
+          </div>
+          <div>Platform: Web/WebXR</div>
+          <div>
+            Framework:{' '}
+            <a href="https://threejs.org/" target="_blank" rel="noreferrer">
+              three.js
+            </a>
+          </div>
+        </div>
+        <div>
+          <div className="relative">
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube-nocookie.com/embed/9u9oEYCQNgw"
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+          <div className="description">
+            <div>
+              <h3>You are a cat DJ creating purrfect setlists.</h3>
+              ⭕The vinyl you choose to play after the previous one will either
+              <br />
+              🎉build up your combo or 💥break all progress.
+              <br />
+              Fill the meter to lock in a sequence.
+              <br />
+              <b>Finish all three sequences to win!</b>
+            </div>
+
+            <div>
+              <strong>Note:</strong> As a part of the JS13k Games Jam, submitted
+              code must be less than 13 kilobytes (excluding the three.js
+              library)
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="portfolio-item">
+        <div className="meta">
+          <div className="title">
+            <a
+              href="https://boldbigflank.itch.io/the-emerald-serpent"
+              target="_blank"
+              rel="noreferrer"
+            >
+              The Emerald Serpent
+            </a>
+          </div>
+          <div className="subtitle">
+            JS13kGames 2024 Entry (#6 WebVR Category; Theme: Triskaidekaphobia)
+          </div>
+          <div>Platform: Web/WebXR</div>
+          <div>
+            Framework:{' '}
+            <a
+              href="https://www.babylonjs.com/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              babylon.js
+            </a>
+          </div>
+        </div>
+        <div>
+          <div className="relative">
+            <Image
+              src="/images/emerald-serpent.png"
+              alt="3d snake made of cubes with a 13 next to it"
+              style={{
+                width: '100%',
+                maxWidth: '400px',
+                height: 'auto',
+              }}
+              width={640}
+              height={360}
+            ></Image>
+          </div>
+          <div className="description">
+            <div>
+              You are trapped by a superstitious puzzle master who will test you
+              with Physical, Mental, Skill and Mystery challenges. Reach the 13
+              in each one to banish the puzzle master and win the game.
+            </div>
+
+            <div>
+              <strong>Note:</strong> As a part of the JS13k Games Jam, submitted
+              code must be less than 13 kilobytes (excluding the three.js
+              library)
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="portfolio-item">
+        <div className="meta">
+          <div className="title">
+            <a
               href="https://boldbigflank.itch.io/one-man-threat-ops"
               target="_blank"
               rel="noreferrer"
@@ -59,7 +169,7 @@ export const Portfolio = (): JSX.Element => {
         <div className="meta">
           <div className="title">
             <a
-              href="https://alexswan.io/js13k-2023/"
+              href="https://boldbigflank.itch.io/the-mystery-at-glamis-castle"
               target="_blank"
               rel="noreferrer"
             >
